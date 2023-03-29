@@ -1,0 +1,2 @@
+!function(){var t=document.querySelectorAll(t);t.addEventListener("click",(function(){EventTarget.textContent="Start",timerId=setInterval((function(){document.body.style.backgroundColor="#".concat(Math.floor(16777215*Math.random()).toString(16).padStart(6,"0"))}),1e3)})),stopBtn.addEventListener("click",(function(){clearInterval(timerId),console.log("Interval with id ".concat(timerId," has stopped!"))}))}();
+//# sourceMappingURL=01-color-switcher.b53c187e.js.map

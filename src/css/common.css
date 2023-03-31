@@ -16,3 +16,72 @@ img {
   display: block;
   max-width: 100%;
 }
+
+.timer {
+  margin: 0 auto;
+  display: flex;
+width: 400px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-right: 30px;
+}
+
+.value {
+  font-size: 40px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 4px;
+  color: #7f0cd6;
+  text-shadow: 0 6px 8px #191715;
+}
+
+.label {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #7f0cd6;
+  text-shadow: 0 6px 8px #191715 ;
+}
+
+input[type="datetime-local" i]{
+width: 500px;
+font-size: 40px;
+display: block;
+margin: 0 auto;
+border-radius: 5px;
+  color: #7f0cd6;
+  background-color: #a9dcf7;
+  box-shadow: 0 6px 8px #191715;
+}
+#datetime-picker{
+width: 350px;
+font-size: 40px;
+display: block;
+margin: 0 auto;
+border-radius: 5px;
+  color: #7f0cd6;
+  background-color: #a9dcf7;
+  box-shadow: 0 6px 8px #191715;
+}
+
+.button-start-stop{
+  display: block;
+  margin: 20px auto;
+  font-size: 40px;
+  border-radius: 5px;
+  color: #7f0cd6;
+  background-color: #00ff88;
+}
+
+button[disabled].button-start-stop {
+  color: #6a6864;
+  background-color: #dee8e3;
+}
+[id^=NotiflixReportWrap]>*>p {
+  display: block;
+  margin: 0 auto;
+}

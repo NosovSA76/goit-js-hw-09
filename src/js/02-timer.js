@@ -53,7 +53,8 @@ const options = {
   },
 };
 
-const startBtnHandler = function() {
+const startBtnHandler = function () {
+
   if (!isRunning) {
     taimerSet();
     startBtn.textContent = "Stop";
@@ -63,7 +64,6 @@ const startBtnHandler = function() {
   } else {
     taimerUserStop();
     startBtn.textContent = "Start";
-    startBtn.style.backgroundColor = "#00ff88"
     isRunning = false;
     console.log(isRunning)
   }
@@ -96,12 +96,16 @@ const taimerSet = function () {
     spanSeconds.textContent = secundForDeadLine.toString().padStart(2, '0');
   }, 1000);
 }
-  function taimerEndStop() {
+function taimerEndStop() {
     clearInterval(intervalId);
     intervalId = null;
     spanSeconds.textContent = "00";
-
+    startBtn.disabled = true;
+    startBtn.style.backgroundColor = "#dee8e3"
+    startBtn.style.color = "#6a6864"
+    Report.failure('Час вичерпано!', 'Для запуску нового відліку, обирить нову дату!');
 }
+
 
 function taimerUserStop() {
   clearInterval(intervalId);
@@ -110,37 +114,13 @@ function taimerUserStop() {
   spanHours.textContent = "00";
   spanMinutes.textContent = "00";
   spanSeconds.textContent = "00";
-  Report.failure('Відлік зупинено!', 'Для запуску відліку, обирить нову дату або просто натиснить Start ще раз!');
+  startBtn.disabled = true;
+  startBtn.style.backgroundColor = "#dee8e3"
+  startBtn.style.color = "#6a6864"
+  Report.failure('Відлік зупинено!', 'Для запуску нового відліку, обирить нову дату!');
 }
 
 
-
-
-
-
-// function taimerStart2 (event) {
-// event.preventDefault();
-// let secunds = Number(secundForDeadLine)
-
-//     for (i = 0; i <= timeForDeadLine; i +=1){
-//      intervalId = setInterval(() => { secunds = secunds - 1
-//   spanSeconds.textContent = secunds.toString().padStart(2, '0');
-
-//   }, 1000)}
-
-
-
-
-
-// if (selectedDates[0] >= Date()) {
-//   startBtn.disabled = false;
-// Console.loge(Date())}
-
-// deadLineInput.addEventListener('input', startTimerForDeadline());
-
-// startTimerForDeadline(
-
-// );
 
 
 

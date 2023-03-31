@@ -1,5 +1,6 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import { Report } from 'notiflix/build/notiflix-report-aio';
 
 const deadLineInput = document.querySelector('#datetime-picker');
 const startBtn = document.querySelector('button[data-start]');
@@ -14,7 +15,8 @@ let hourForDeadLine = 0;
 let minutForDeadLine = 0;
 let endDate;
 let intervalId;
-
+let isRunning = false;
+startBtn.className = "button-start-stop"
 startBtn.disabled = true;
 
 const options = {
@@ -23,64 +25,111 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    const serg = selectedDates[0]
-    endDate = serg.getTime()
-    console.log(endDate)
+    const selectedDate = selectedDates[0]
+    if (selectedDate){
+    endDate = selectedDate.getTime()}
     const actualDate = new Date()
     const controlDate = actualDate.getTime();
-    console.log(controlDate)
-    if (endDate >= controlDate) {
+    if (endDate >= controlDate && deadLineInput.value) {
       // перевіряємо вірність дати
       startBtn.disabled = false;
-      startBtn.addEventListener('click', taimerSet);
+      startBtn.removeEventListener('click', startBtnHandler);
+      startBtn.addEventListener('click', startBtnHandler);
+      startBtn.style.color = "#7f0cd6"
+      startBtn.style.backgroundColor = "#00ff88"
+      Report.success(
+'Дата обрана!',
+'Натиснить кнопку Start для початку відліку!',
+'Okay',
+);
+    ;
     }
     else {
       startBtn.disabled = true;
-      startBtn.removeEventListener('click', alert("Дата менша за сучасну") );
+      Report.failure('Оберіть іншу дату!', 'Але якщо у Вас є машина часу звяжитесь з нами, є гарні пропозиції!');
+      startBtn.style.backgroundColor = "#dee8e3"
+      startBtn.style.color = "#6a6864"
     }
   },
+};
+
+const startBtnHandler = function() {
+  if (!isRunning) {
+    taimerSet();
+    startBtn.textContent = "Stop";
+    startBtn.style.backgroundColor = "#ff1500"
+    isRunning = true;
+    console.log(isRunning)
+  } else {
+    taimerUserStop();
+    startBtn.textContent = "Start";
+    startBtn.style.backgroundColor = "#00ff88"
+    isRunning = false;
+    console.log(isRunning)
+  }
 };
 
 flatpickr(deadLineInput, options);
 
 const taimerSet = function () {
-  const newDate = new Date()
-  const startDate = newDate.getTime();
-  timeForDeadLine = Math.round((endDate - startDate) / 1000);
-  secundForDeadLine = timeForDeadLine % 60
-  minutForDeadLine = ((timeForDeadLine - secundForDeadLine) / 60) % 60
-  dayForDeadLine = Math.floor(timeForDeadLine / 60 / 60 / 24);
-  hourForDeadLine = Math.floor((timeForDeadLine - dayForDeadLine * 60 * 60 * 24) / 60 / 60)
+  Report.success(
+'Відлік розпочато!',
+    'Слідкуйте за таймером - час спливає! Для зупинки таймеру натиснить кнопку Stop.',
+'Okay',
+);
+  intervalId = setInterval(() => {
+    const newDate = new Date()
+    const startDate = newDate.getTime();
+    timeForDeadLine = Math.floor((endDate - startDate) / 1000);
+    if (timeForDeadLine <= 0) {
+      taimerEndStop();
+      return;
+    }
+    secundForDeadLine = timeForDeadLine % 60
+    minutForDeadLine = ((timeForDeadLine - secundForDeadLine) / 60) % 60
+    dayForDeadLine = Math.floor(timeForDeadLine / 60 / 60 / 24);
+    hourForDeadLine = Math.floor((timeForDeadLine - dayForDeadLine * 60 * 60 * 24) / 60 / 60)
 
-  spanDays.textContent = dayForDeadLine.toString().padStart(2, '0');
-  spanHours.textContent = hourForDeadLine.toString().padStart(2, '0');
-  spanMinutes.textContent = minutForDeadLine.toString().padStart(2, '0');
-  spanSeconds.textContent = secundForDeadLine.toString().padStart(2, '0');
-
-  intervalId = setInterval(taimerStart, 1000);
-
-
-// const inputText = deadLineInput.value;
-// const [datePart, timePart] = inputText.split(" ");
-// const [year, month, day] = datePart.split("-");
-// const [hours, minutes] = timePart.split(":");
-// const date = new Date(year, month - 1, day, hours, minutes);
-//   console.log(date)
-//  console.log(endDate);
-};
-
-const taimerStart = function () {
-
-let secunds = secundForDeadLine
- intervalId = setInterval(() => {
-    for (i = 0; i <= timeForDeadLine; i +=1){
-      secunds = secunds - 1
-  spanSeconds.textContent = secunds.toString().padStart(2, '0');
-
-  }}, 1000)
-
+    spanDays.textContent = dayForDeadLine.toString().padStart(2, '0');
+    spanHours.textContent = hourForDeadLine.toString().padStart(2, '0');
+    spanMinutes.textContent = minutForDeadLine.toString().padStart(2, '0');
+    spanSeconds.textContent = secundForDeadLine.toString().padStart(2, '0');
+  }, 1000);
+}
+  function taimerEndStop() {
+    clearInterval(intervalId);
+    intervalId = null;
+    spanSeconds.textContent = "00";
 
 }
+
+function taimerUserStop() {
+  clearInterval(intervalId);
+  intervalId = null;
+  spanDays.textContent = "00";
+  spanHours.textContent = "00";
+  spanMinutes.textContent = "00";
+  spanSeconds.textContent = "00";
+  Report.failure('Відлік зупинено!', 'Для запуску відліку, обирить нову дату або просто натиснить Start ще раз!');
+}
+
+
+
+
+
+
+// function taimerStart2 (event) {
+// event.preventDefault();
+// let secunds = Number(secundForDeadLine)
+
+//     for (i = 0; i <= timeForDeadLine; i +=1){
+//      intervalId = setInterval(() => { secunds = secunds - 1
+//   spanSeconds.textContent = secunds.toString().padStart(2, '0');
+
+//   }, 1000)}
+
+
+
 
 
 // if (selectedDates[0] >= Date()) {

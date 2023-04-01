@@ -29,7 +29,7 @@ function onPromiseCreate(e) {
   console.log(inputStep);
   console.log(inputAmount);
   for (let i = 1; i <= inputAmount; i += 1) {
-    inputDelay += inputStep;
+    if (i > 1) { inputDelay += inputStep; }
 
     createPromise(i, inputDelay)
       .then(({ position, delay }) => {

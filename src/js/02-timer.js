@@ -39,7 +39,7 @@ const options = {
       startBtn.style.backgroundColor = "#00ff88"
       Report.success(
 'Дата обрана!',
-'Натиснить кнопку Start для початку відліку!',
+'Натиснить кнопку Start для початку відліку! Для зупинки таймеру натиснить кнопку Stop.',
 'Okay',
 );
     ;
@@ -57,12 +57,14 @@ const startBtnHandler = function () {
 
   if (!isRunning) {
     taimerSet();
+    deadLineInput.disabled = true;
     startBtn.textContent = "Stop";
     startBtn.style.backgroundColor = "#ff1500"
     isRunning = true;
     console.log(isRunning)
   } else {
     taimerUserStop();
+    deadLineInput.disabled = false;
     startBtn.textContent = "Start";
     isRunning = false;
     console.log(isRunning)
@@ -72,11 +74,6 @@ const startBtnHandler = function () {
 flatpickr(deadLineInput, options);
 
 const taimerSet = function () {
-  Report.success(
-'Відлік розпочато!',
-    'Слідкуйте за таймером - час спливає! Для зупинки таймеру натиснить кнопку Stop.',
-'Okay',
-);
   intervalId = setInterval(() => {
     const newDate = new Date()
     const startDate = newDate.getTime();

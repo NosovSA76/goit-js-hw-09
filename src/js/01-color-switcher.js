@@ -22,7 +22,6 @@ function stopColorChange() {
   // Активуємо кнопку "Start" та зупиняємо інтервал
   startBtn.disabled = false;
   clearInterval(intervalId);
-  document.body.style.backgroundColor = "#FFFFFF";
 }
 
 
